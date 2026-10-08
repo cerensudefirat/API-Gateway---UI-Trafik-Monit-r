@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: proje2
+
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/ui_traffic_monitor
+    username: root
+    password: Ceren4007
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: test-route
+              uri: http://localhost:8081
+              predicates:
+                - Path=/test/**
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        max.block.ms: 1000
+        request.timeout.ms: 1000
+        delivery.timeout.ms: 2000
+
+traffic:
+  queue:
+    capacity: 10
+
+app:
+  kafka:
+    enabled: true
